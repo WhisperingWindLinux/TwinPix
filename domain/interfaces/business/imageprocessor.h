@@ -85,6 +85,8 @@ Compare the proximity of two images to an original image                        
 
 Fit In View                                                                                             F
 
+Make Icons for iOS app                                                                                  I
+
 
 */
 

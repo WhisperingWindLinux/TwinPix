@@ -13,10 +13,7 @@ QImage MonoColoredDifferenceInPixelValuesComporator::compareImages(const QImage 
     QImage resultImg = image1.copy();
     QPainter painter(&resultImg);
 
-    // Add a semi-transparent layer
-    painter.setOpacity(0.6);
     painter.drawImage(0, 0, image1);
-    painter.setOpacity(1.0);
 
     // Compare pixels and highlight differences in red
     for (int y = 0; y < image1.height(); ++y) {

@@ -274,7 +274,6 @@ QList<ImageProcessorInfo> ImageProcessingInteractor::getImageProcessorsInfo() {
     auto greenChannelFilter = make_shared<GreenChannelFilter>();
     auto blueChannelFilter = make_shared<BlueChannelFilter>();
     auto grayscaleFilter = make_shared<GrayscaleFilter>();
-
     processorsManager->addProcessor(redChannelFilter);
     processorsManager->addProcessor(greenChannelFilter);
     processorsManager->addProcessor(blueChannelFilter);

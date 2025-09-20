@@ -21,19 +21,25 @@ def parse_color(color_name):
     return colors.get(color_name.lower(), (0, 0, 0))
 
 
-def compare_images(img1, img2, color):
+def compare_images(img1, img2, color, opacity=0.6):
     # Ensure both images are of the same size
     if img1.shape != img2.shape:
         raise ValueError("Images must have the same dimensions")
 
-    # Create a copy of the first image to draw differences
-    result_img = img1.copy()
+    # Convert images to BGRA
+    img1_bgra = cv2.cvtColor(img1, cv2.COLOR_BGR2BGRA)
+    img2_bgra = cv2.cvtColor(img2, cv2.COLOR_BGR2BGRA)
+
+    # Create a transparent copy of the first image
+    result_img = img1_bgra.copy()
+    result_img[:, :, 3] = (opacity * 255)
 
     # Find the differences between the two images
     diff_mask = np.any(img1 != img2, axis=-1)  # Mask of differing pixels
 
     # Apply the specified color to the differing pixels
-    result_img[diff_mask] = color
+    color_with_alpha = (*color, 255)
+    result_img[diff_mask] = color_with_alpha
 
     return result_img
 

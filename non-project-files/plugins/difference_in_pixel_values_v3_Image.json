@@ -17,7 +17,7 @@
       "name": "Show Image",
       "type": "alternatives",
       "alternatives": ["yes", "no"],
-      "defaultIndex": 1,
+      "defaultIndex": 0,
       "description" : "Show Image."
     }
   ]
