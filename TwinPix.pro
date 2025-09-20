@@ -23,7 +23,6 @@ SOURCES += \
     business/imageanalysis/comporators/monocoloreddifferenceinpixelvaluescomporator.cpp \
     business/imageanalysis/comporators/pixelsbrightnesscomparator.cpp \
     business/imageanalysis/comporators/sharpnesscomparator.cpp \
-    business/imageanalysis/filters/appleiconmaker.cpp \
     business/imageanalysis/filters/grayscalefilter.cpp \
     business/imageanalysis/filters/rgbfilter.cpp \
     business/imageanalysis/imageprocessinginteractor.cpp \
@@ -89,7 +88,6 @@ HEADERS += \
     business/imageanalysis/comporators/monocoloreddifferenceinpixelvaluescomporator.h \
     business/imageanalysis/comporators/pixelsbrightnesscomparator.h \
     business/imageanalysis/comporators/sharpnesscomparator.h \
-    business/imageanalysis/filters/appleiconmaker.h \
     business/imageanalysis/filters/grayscalefilter.h \
     business/imageanalysis/filters/rgbfilter.h \
     business/imageanalysis/imageprocessinginteractor.h \

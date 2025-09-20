@@ -13,7 +13,6 @@
 #include <business/imageanalysis/comporators/sharpnesscomparator.h>
 #include <business/imageanalysis/comporators/customrangeddifferenceinpixelvaluescomparator.h>
 #include <business/imageanalysis/comporators/linernonlinerdifferencecomparator.h>
-#include <business/imageanalysis/filters/appleiconmaker.h>
 #include <business/imageanalysis/filters/grayscalefilter.h>
 #include <business/imageanalysis/filters/rgbfilter.h>
 #include <data/storage/filedialoghandler.h>
@@ -275,16 +274,10 @@ QList<ImageProcessorInfo> ImageProcessingInteractor::getImageProcessorsInfo() {
     auto greenChannelFilter = make_shared<GreenChannelFilter>();
     auto blueChannelFilter = make_shared<BlueChannelFilter>();
     auto grayscaleFilter = make_shared<GrayscaleFilter>();
-    #ifdef ADD_MISC
-        auto appleIconMaker = make_shared<AppleIconMaker>();
-    #endif
     processorsManager->addProcessor(redChannelFilter);
     processorsManager->addProcessor(greenChannelFilter);
     processorsManager->addProcessor(blueChannelFilter);
     processorsManager->addProcessor(grayscaleFilter);
-    #ifdef ADD_MISC
-        processorsManager->addProcessor(appleIconMaker);
-    #endif
 
     // add plugins (comparators and filters)
 
