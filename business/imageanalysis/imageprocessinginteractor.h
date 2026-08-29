@@ -11,6 +11,7 @@
 #include <domain/valueobjects/savefileinfo.h>
 #include <business/recentfilesmanager.h>
 #include <domain/interfaces/presentation/imageprocessinginteractorlistener.h>
+#include "runallcomparatorsinteractor.h"
 
 
 class PluginsManager;
@@ -52,6 +53,8 @@ private:
     ImageHolderPtr mOriginalImages;
     ImageHolderPtr mDisplayedImages;
     LastDisplayedComparisonResult mLastDisplayedComparisonResult;
+
+    std::unique_ptr<RunAllComparatorsInteractor> mRunAllComparatorsInteractor;
 
     void coreCallImageProcessor(const QVariant &callerData);
     void callComparator(IComparatorPtr comparator, ImageHolderPtr images);
