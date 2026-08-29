@@ -57,7 +57,7 @@ void RunAllComparatorsInteractor::run()
     }
 
     mSlots.clear();
-    mSlots.reserve(runnable.size());
+    mSlots.resize(runnable.size());
     mCompletedCount = 0;
     mCancelRequested = false;
 

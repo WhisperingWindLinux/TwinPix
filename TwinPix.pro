@@ -28,6 +28,7 @@ SOURCES += \
     business/imageanalysis/imageprocessinginteractor.cpp \
     business/imageanalysis/imageprocessorsmanager.cpp \
     business/utils/imagesinfo.cpp \
+    business/utils/threadpool.cpp \
     business/validation/imageextensionsinfoprovider.cpp \
     business/validation/imagevalidationrules.cpp \
     business/imagefilesinteractors.cpp \
@@ -92,6 +93,7 @@ HEADERS += \
     business/imageanalysis/filters/rgbfilter.h \
     business/imageanalysis/imageprocessinginteractor.h \
     business/imageanalysis/imageprocessorsmanager.h \
+    business/utils/threadpool.h \
     business/validation/imageextensionsinfoprovider.h \
     business/validation/imagevalidationrules.h \
     business/validation/imagevalidationrulesfactory.h \
