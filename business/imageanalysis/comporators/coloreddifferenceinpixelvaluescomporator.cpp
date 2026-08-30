@@ -1,4 +1,4 @@
-#include "coloreddifferenceInpixelvaluescomporator.h"
+#include "coloreddifferenceinpixelvaluescomporator.h"
 
 #include <QCoreApplication>
 #include <QImage>

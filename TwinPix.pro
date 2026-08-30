@@ -77,7 +77,7 @@ SOURCES += \
 HEADERS += \
     business/getimagesfromvideosinteractor.h \
     business/imageanalysis/autoanalysissettingsinteractor.h \
-    business/imageanalysis/comporators/coloreddifferenceInpixelvaluescomporator.h \
+    business/imageanalysis/comporators/coloreddifferenceinpixelvaluescomporator.h \
     business/imageanalysis/comporators/colorssaturationcomporator.h \
     business/imageanalysis/comporators/contrastcomporator.h \
     business/imageanalysis/comporators/customrangeddifferenceinpixelvaluescomparator.h \

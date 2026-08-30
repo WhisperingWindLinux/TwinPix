@@ -8,7 +8,7 @@
 #include <business/imageanalysis/comporators/contrastcomporator.h>
 #include <business/imageanalysis/comporators/monocoloreddifferenceinpixelvaluescomporator.h>
 #include <business/imageanalysis/comporators/imageproximitytoorigincomparator.h>
-#include <business/imageanalysis/comporators/coloreddifferenceInpixelvaluescomporator.h>
+#include <business/imageanalysis/comporators/coloreddifferenceinpixelvaluescomporator.h>
 #include <business/imageanalysis/comporators/pixelsbrightnesscomparator.h>
 #include <business/imageanalysis/comporators/sharpnesscomparator.h>
 #include <business/imageanalysis/comporators/customrangeddifferenceinpixelvaluescomparator.h>

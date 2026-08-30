@@ -5,7 +5,7 @@
 
 #include <domain/valueobjects/pixeldiffrencerange.h>
 
-#include <business/imageanalysis/comporators/coloreddifferenceInpixelvaluescomporator.h>
+#include <business/imageanalysis/comporators/coloreddifferenceinpixelvaluescomporator.h>
 
 class PixelsAbsolutValueFormatter
 {

@@ -2,7 +2,7 @@
 
 #include <QImage>
 #include <QColor>
-#include <qstring>
+#include <qstring.h>
 #include <QDebug>
 #include <qfileinfo.h>
 
