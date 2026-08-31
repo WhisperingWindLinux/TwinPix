@@ -1,20 +1,16 @@
 #ifndef PLUGINSSETTINGS_H
 #define PLUGINSSETTINGS_H
 
-#include <qstring.h>
+#include <QString>
 
 struct PluginsSettings {
+    // A single constructor handling both lvalues and rvalues efficiently via Qt's implicit sharing
+    PluginsSettings(QString pythonPath, QString pluginsPath)
+        : pythonInterpreterPath(std::move(pythonPath).trimmed()),
+        pluginsDirectoryPath(std::move(pluginsPath).trimmed()) {}
 
-  PluginsSettings(QString&& pythonInterpreterPath, QString&& pluginsDirectoryPath)
-      : pythonInterpreterPath(std::move(pythonInterpreterPath)),
-        pluginsDirectoryPath(std::move(pluginsDirectoryPath)) {}
-
-  PluginsSettings(const QString &pythonInterpreterPath, const QString &pluginsDirectoryPath)
-      : pythonInterpreterPath(pythonInterpreterPath),
-      pluginsDirectoryPath(pluginsDirectoryPath) {}
-
-  const QString pythonInterpreterPath;
-  const QString pluginsDirectoryPath;
+    const QString pythonInterpreterPath;
+    const QString pluginsDirectoryPath;
 };
 
 #endif // PLUGINSSETTINGS_H
