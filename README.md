@@ -15,4 +15,4 @@ The application has so far been tested only on macOS Sonoma / Ubuntu 26, with a 
 5. Press S to toggle between the two images for detailed visual comparison.
 6. Use the color picker to inspect and compare individual pixel colors.
 7. Extend the built-in analysis and comparison toolkit with Python plugins
-8. Generates an HTML report using the image-comparison algorithms you choose. [Here’s](https://htmlpreview.github.io/?https://github.com/WhisperingWindLinux/TwinPix/blob/develop/non-project-files/samples/seq-1_vs_seq-2_comparison_report/report.html) an example HTML report comparing two images. 
+8. Generates an HTML report using the image-comparison algorithms you choose. [Here’s](https://htmlpreview.github.io/?https://github.com/WhisperingWindLinux/TwinPix/blob/develop/non-project-files/samples/seq-1_vs_seq-2_comparison_report/report.html) an example HTML report comparing two images.
