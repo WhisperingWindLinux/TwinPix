@@ -28,6 +28,7 @@ SOURCES += \
     business/imageanalysis/imageprocessinginteractor.cpp \
     business/imageanalysis/imageprocessorsmanager.cpp \
     business/utils/imagesinfo.cpp \
+    business/utils/threadpool.cpp \
     business/validation/imageextensionsinfoprovider.cpp \
     business/validation/imagevalidationrules.cpp \
     business/imagefilesinteractors.cpp \
@@ -76,7 +77,7 @@ SOURCES += \
 HEADERS += \
     business/getimagesfromvideosinteractor.h \
     business/imageanalysis/autoanalysissettingsinteractor.h \
-    business/imageanalysis/comporators/coloreddifferenceInpixelvaluescomporator.h \
+    business/imageanalysis/comporators/coloreddifferenceinpixelvaluescomporator.h \
     business/imageanalysis/comporators/colorssaturationcomporator.h \
     business/imageanalysis/comporators/contrastcomporator.h \
     business/imageanalysis/comporators/customrangeddifferenceinpixelvaluescomparator.h \
@@ -92,6 +93,7 @@ HEADERS += \
     business/imageanalysis/filters/rgbfilter.h \
     business/imageanalysis/imageprocessinginteractor.h \
     business/imageanalysis/imageprocessorsmanager.h \
+    business/utils/threadpool.h \
     business/validation/imageextensionsinfoprovider.h \
     business/validation/imagevalidationrules.h \
     business/validation/imagevalidationrulesfactory.h \
@@ -164,7 +166,7 @@ FORMS += \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+else: unix:!android: target.path = $$(HOME)/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 ICON = Resources/app_icon.icns

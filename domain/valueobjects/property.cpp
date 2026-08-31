@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <float.h>
+#include <climits>
 
 // Constructor for real property
 Property::Property(const QString &propertyName,

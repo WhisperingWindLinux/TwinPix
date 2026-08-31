@@ -16,6 +16,14 @@ Simply open a terminal and enter the following command:
 
 xattr -c <path/to/TwinPix.app>
 
+PYTHON PLUGINS
+
+Please install the following Python packages to enable plugin support: opencv-python, numpy, matplotlibtplotlib.
+
+Use the following command to install the packages:
+
+pip3 install opencv-python numpy matplotlib
+
 LICENSE
 
 This program is licensed under the GNU General Public License Version 3.

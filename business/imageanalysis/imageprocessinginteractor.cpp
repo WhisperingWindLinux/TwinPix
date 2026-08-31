@@ -8,7 +8,7 @@
 #include <business/imageanalysis/comporators/contrastcomporator.h>
 #include <business/imageanalysis/comporators/monocoloreddifferenceinpixelvaluescomporator.h>
 #include <business/imageanalysis/comporators/imageproximitytoorigincomparator.h>
-#include <business/imageanalysis/comporators/coloreddifferenceInpixelvaluescomporator.h>
+#include <business/imageanalysis/comporators/coloreddifferenceinpixelvaluescomporator.h>
 #include <business/imageanalysis/comporators/pixelsbrightnesscomparator.h>
 #include <business/imageanalysis/comporators/sharpnesscomparator.h>
 #include <business/imageanalysis/comporators/customrangeddifferenceinpixelvaluescomparator.h>
@@ -20,7 +20,6 @@
 #include <business/utils/imagesinfo.h>
 #include "domain/interfaces/presentation/iprocessorpropertiesdialogcallback.h"
 #include "imageprocessorsmanager.h"
-#include "runallcomparatorsinteractor.h"
 
 ImageProcessingInteractor::ImageProcessingInteractor(
                                     const ImageHolderPtr images,
@@ -308,14 +307,14 @@ void ImageProcessingInteractor::runAllComparators() {
     ComparableImage firstComparableImage {image1, fullName1};
     ComparableImage secondComparableImage {image2, fullName2};
 
-    RunAllComparatorsInteractor runAllComparatorsInteractor {
+    mRunAllComparatorsInteractor = std::make_unique<RunAllComparatorsInteractor>(
                                             mProgressDialogCallback,
                                             firstComparableImage,
                                             secondComparableImage,
                                             saveReportDirPath
-                                        };
+        );
 
-    runAllComparatorsInteractor.run();
+    mRunAllComparatorsInteractor->run();
 }
 
 bool ImageProcessingInteractor::subscribe(IImageProcessingInteractorListener *listener) {
