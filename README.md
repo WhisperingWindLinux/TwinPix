@@ -3,8 +3,8 @@
 ### Warning
 
 This is a alpha version of the application, and bugs and memory leaks are possible.
-The application has so far been tested only on macOS Sonoma 14.1.2 (Apple Silicon M1 Mac), with a 1920x1080 monitor. Kit: Qt 6.9.0 for macOS.
-The app’s still in development, but the core features are already in place. <br/>
+The application has so far been tested only on macOS Sonoma / Ubuntu 26, with a 1920x1080 monitor. Kit: Qt 6.11.1.
+<br/>
 
 ### Features
 
