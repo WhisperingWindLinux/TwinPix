@@ -1,0 +1,17 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/html">
+    <file alias="help/image-area-selection.html">html/help/image-area-selection.html</file>
+    <file alias="help/processor-info.html">html/help/processor-info.html</file>
+    <file alias="help/properties.html">html/help/properties.html</file>
+    <file alias="help/property-row.html">html/help/property-row.html</file>
+    <file alias="help/property.html">html/help/property.html</file>
+    <file alias="help/alternatives-property.html">html/help/alternatives-property.html</file>
+    <file alias="help/file-path-property.html">html/help/file-path-property.html</file>
+    <file alias="about/application-name.html">html/about/application-name.html</file>
+    <file alias="about/alpha-warning.html">html/about/alpha-warning.html</file>
+    <file alias="about/bug-warning.html">html/about/bug-warning.html</file>
+    <file alias="color-range-description.html">html/color-range-description.html</file>
+    <file alias="reports/extended-report.html">html/reports/extended-report.html</file>
+    <file alias="reports/simple-report.html">html/reports/simple-report.html</file>
+</qresource>
+</RCC>

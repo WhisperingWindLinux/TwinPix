@@ -5,6 +5,8 @@
 #include <qboxlayout.h>
 #include <qlabel.h>
 
+#include <presentation/dialogs/formatters/helphtmlformatter.h>
+
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent) {
     setWindowTitle("About");
 
@@ -12,7 +14,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent) {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     // Application information
-    QLabel *appNameLabel = new QLabel("<h2>TwinPix</h2>", this);
+    QLabel *appNameLabel = new QLabel(HelpHtmlFormatter::aboutApplicationName(), this);
     appNameLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(appNameLabel);
 
@@ -20,12 +22,12 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent) {
     appVersion->setAlignment(Qt::AlignCenter);
     layout->addWidget(appVersion);
 
-    QLabel *warning = new QLabel("<b>The application is in the alpha testing stage</b>");
+    QLabel *warning = new QLabel(HelpHtmlFormatter::aboutAlphaWarning());
     warning->setWordWrap(true);
     warning->setAlignment(Qt::AlignCenter) ;
     layout->addWidget(warning);
 
-    QLabel *warning2 = new QLabel("<b>and may contain bugs!</b>");
+    QLabel *warning2 = new QLabel(HelpHtmlFormatter::aboutBugWarning());
     warning2->setAlignment(Qt::AlignCenter);
     layout->addWidget(warning2);
 

@@ -14,6 +14,10 @@ public:
     ~HelpHtmlFormatter() = delete;
     
     static QString formatImageProcessorInfo(const ImageProcessorInfo &info);
+    static QString imageAreaSelectionHelp();
+    static QString aboutApplicationName();
+    static QString aboutAlphaWarning();
+    static QString aboutBugWarning();
 
 private:
     static QString enumToString(ImageProcessorType type);
