@@ -33,26 +33,7 @@ HelpDialog::HelpDialog(const QList<ImageProcessorInfo> &algorithms, QWidget *par
 
     // Create text browser for "Image Area Selection" tab
     mImageAreaSelectionBrowser = new QTextBrowser();
-    QString infoText = R"(
-        <html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; font-size: 13px; }
-                p { margin-bottom: 10px; }
-                ul { margin-left: 20px; }
-            </style>
-        </head>
-        <body>
-            <p>You can select an area of the image using the left mouse button along with three modifier keys: <b>Option</b>, <b>Shift</b>, and <b>Command</b>.</p>
-            <ul>
-                <li><b>Command:</b> If you select an area while holding the <b>Command</b> key, the selected area of both compared images will be saved in a temporary directory as two PNG files. These files will be opened in a new instance of the application. Upon closing this new instance, the files will be automatically deleted. If you need these files, save each of them as a copy (<b>Command+S</b>).</li>
-                <li><b>Shift:</b> If you select an area while holding the <b>Shift</b> key, the selected part of the image will be zoomed to fit the screen.</li>
-                <li><b>Option + Comparator Hotkey:</b> If you select an area while holding <b>Option</b> and the comparator hotkey, the comparator will run only for the selected area. If the comparator returns an image and the selected area does not match the resolution of the original image, the comparison result will be opened in a separate viewer window. This is because the scaling feature in the main application window requires all images to have the same resolution when switching between them.</li>
-            </ul>
-        </body>
-        </html>
-    )";
-    mImageAreaSelectionBrowser->setHtml(infoText);
+    mImageAreaSelectionBrowser->setHtml(HelpHtmlFormatter::imageAreaSelectionHelp());
 
     // Create tab widget
     QTabWidget *tabWidget = new QTabWidget();

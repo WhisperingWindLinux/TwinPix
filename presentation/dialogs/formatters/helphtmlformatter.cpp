@@ -1,34 +1,69 @@
 #include "helphtmlformatter.h"
 
+#include <QFile>
 
-QString HelpHtmlFormatter::formatImageProcessorInfo(const ImageProcessorInfo &info) {
-    QString html;
+namespace {
 
-    html += QString("<b>Type:</b> %1.<br>").arg(enumToString(info.type));
-    html += QString("<b>Full Name:</b> %1.<br>").arg(info.fullName);
-    html += QString("<b>Short Name (Menu Display):</b> %1.<br>").arg(info.name);
-    html += QString("<b>Hotkey:</b> %1.<br>").arg(info.hotkey);
-    html += QString("<b>Description:</b> %1<br><br>").arg(info.description);
+QString loadTemplate(const QString &path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return {};
+    }
+    return QString::fromUtf8(file.readAll());
+}
+
+}
+
+QString HelpHtmlFormatter::formatImageProcessorInfo(const ImageProcessorInfo &info)
+{
+    QString html = loadTemplate(":/html/help/processor-info.html");
+    html.replace("%TYPE%", enumToString(info.type));
+    html.replace("%FULL_NAME%", info.fullName);
+    html.replace("%NAME%", info.name);
+    html.replace("%HOTKEY%", info.hotkey);
+    html.replace("%DESCRIPTION%", info.description);
 
     if (!info.properties.isEmpty()) {
-        html += "<h3>Properties</h3>";
-        html += "<table border='1' cellspacing='0' cellpadding='5'>";
-        html += "<tr><th>Parameter Name</th><th>Parameter Description</th></tr>";
-
+        QString properties = loadTemplate(":/html/help/properties.html");
+        QString rows;
         for (const Property &property : info.properties) {
-            html += "<tr>";
-            html += QString("<td>%1</td>").arg(property.mPropertyName);
-            html += QString("<td>%1</td>").arg(formatProperty(property));
-            html += "</tr>";
+            QString row = loadTemplate(":/html/help/property-row.html");
+            row.replace("%PROPERTY_NAME%", property.mPropertyName);
+            row.replace("%PROPERTY_DESCRIPTION%", formatProperty(property));
+            rows += row;
         }
-
-        html += "</table>";
+        properties.replace("%PROPERTY_ROWS%", rows);
+        html.replace("%PROPERTIES%", properties);
+    } else {
+        html.replace("%PROPERTIES%", QString{});
     }
 
     return html;
 }
 
-QString HelpHtmlFormatter::enumToString(ImageProcessorType type) {
+QString HelpHtmlFormatter::imageAreaSelectionHelp()
+{
+    return loadTemplate(":/html/help/image-area-selection.html");
+}
+
+QString HelpHtmlFormatter::aboutApplicationName()
+{
+    return loadTemplate(":/html/about/application-name.html");
+}
+
+QString HelpHtmlFormatter::aboutAlphaWarning()
+{
+    return loadTemplate(":/html/about/alpha-warning.html");
+}
+
+QString HelpHtmlFormatter::aboutBugWarning()
+{
+    return loadTemplate(":/html/about/bug-warning.html");
+}
+
+QString HelpHtmlFormatter::enumToString(ImageProcessorType type)
+{
     switch (type) {
     case ImageProcessorType::Comparator:
         return "Comparator";
@@ -39,37 +74,36 @@ QString HelpHtmlFormatter::enumToString(ImageProcessorType type) {
     }
 }
 
-QString HelpHtmlFormatter::formatProperty(const Property &property) {
+QString HelpHtmlFormatter::formatProperty(const Property &property)
+{
     QString result;
 
     switch (property.mPropertyType) {
     case Property::Type::Integer:
-        result += "<b>Variable Type</b>: Integer.<br>";
-        result += QString("<b>Description</b>: %1<br>").arg(property.mPropertyDescription);
-        result += QString("<b>Default Value</b>: %1.<br>").arg(static_cast<int>(property.mDoubleValue));
-        result += QString("<b>Max Value</b>: %1.<br>").arg(static_cast<int>(property.mMax));
-        result += QString("<b>Min Value</b>: %1.").arg(static_cast<int>(property.mMin));
+        result = loadTemplate(":/html/help/property.html");
+        result.replace("%TYPE%", "Integer");
+        result.replace("%DESCRIPTION%", property.mPropertyDescription);
+        result.replace("%DEFAULT%", QString::number(static_cast<int>(property.mDoubleValue)));
+        result.replace("%MAX%", QString::number(static_cast<int>(property.mMax)));
+        result.replace("%MIN%", QString::number(static_cast<int>(property.mMin)));
         break;
-
     case Property::Type::Real:
-        result += "<b>Variable Type</b>: Real.<br>";
-        result += QString("<b>Description</b>: %1<br>").arg(property.mPropertyDescription);
-        result += QString("<b>Default Value</b>: %1.<br>").arg(property.mDoubleValue);
-        result += QString("<b>Max Value</b>: %1.<br>").arg(property.mMax);
-        result += QString("<b>Min Value</b>: %1.").arg(property.mMin);
+        result = loadTemplate(":/html/help/property.html");
+        result.replace("%TYPE%", "Real");
+        result.replace("%DESCRIPTION%", property.mPropertyDescription);
+        result.replace("%DEFAULT%", QString::number(property.mDoubleValue));
+        result.replace("%MAX%", QString::number(property.mMax));
+        result.replace("%MIN%", QString::number(property.mMin));
         break;
-
     case Property::Type::Alternatives:
-        result += "<b>Variable Type</b>: List of String Values.<br>";
-        result += QString("<b>Description</b>: %1<br>").arg(property.mPropertyDescription);
-        result += QString("<b>Alternative Values</b>: %1.<br>").arg(property.mAlternativesValue.join(", "));
-        result += QString("<b>Default Choice</b>: %1.").arg(
-            property.mAlternativesValue.value(static_cast<int>(property.mDoubleValue)));
+        result = loadTemplate(":/html/help/alternatives-property.html");
+        result.replace("%DESCRIPTION%", property.mPropertyDescription);
+        result.replace("%ALTERNATIVES%", property.mAlternativesValue.join(", "));
+        result.replace("%DEFAULT%", property.mAlternativesValue.value(static_cast<int>(property.mDoubleValue)));
         break;
-
     case Property::Type::FilePath:
-        result += "<b>Variable Type</b>: File Path.<br>";
-        result += QString("<b>Description</b>: %1").arg(property.mPropertyDescription);
+        result = loadTemplate(":/html/help/file-path-property.html");
+        result.replace("%DESCRIPTION%", property.mPropertyDescription);
         break;
     }
 
