@@ -268,7 +268,9 @@ void ImageViewer::toggleImage() {
     if (!hasActiveSession() || mIsSingleImageMode) {
         return;
     }
-    QRectF viewRect = mapToScene(viewport()->geometry()).boundingRect();
+
+    // Switching visibility already preserves the viewport's transform and
+    // scroll position. Recentring here introduces drift on repeated switches.
 
     if (mComparatorResultDisplayedImage != nullptr) {
         mCustomScene->removeItem(mComparatorResultDisplayedImage);
@@ -291,7 +293,6 @@ void ImageViewer::toggleImage() {
         mParent->onComparebleImageDisplayed(mFirstImageName);
     }
 
-    centerOn(viewRect.center());
     if (mLastCursorPos) {
         sendPixelColorUnderCursor(mLastCursorPos.value());
     }
