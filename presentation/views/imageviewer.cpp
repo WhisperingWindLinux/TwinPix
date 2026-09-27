@@ -91,7 +91,11 @@ void ImageViewer::setToActualSize() {
     if (!hasActiveSession()) {
         return;
     }
-    resetTransform();
+    // Pixmap items use logical coordinates; Actual Size maps each source
+    // pixel to one physical viewport pixel, including DPR-tagged images.
+    const qreal imageDpr = getImageShowedOnTheScreen().mImage.devicePixelRatio();
+    const qreal actualScale = imageDpr / viewport()->devicePixelRatioF();
+    setTransform(QTransform::fromScale(actualScale, actualScale));
 }
 
 void ImageViewer::setToFitImageInView() {

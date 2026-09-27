@@ -9,6 +9,79 @@ class TestImageViewerNavigation : public QObject {
     Q_OBJECT
 
 private slots:
+    void actualSizeMapsSourcePixelsToDisplayPixels_data() {
+        QTest::addColumn<qreal>("imageDpr");
+        QTest::addColumn<QString>("imageMode");
+        for (qreal dpr : {1.0, 1.5, 2.0}) {
+            for (const QString &mode : {QString("single"), QString("first"),
+                                       QString("second"), QString("comparison")}) {
+                const QByteArray name = QString("%1-dpr%2").arg(mode).arg(dpr).toLatin1();
+                QTest::newRow(name.constData()) << dpr << mode;
+            }
+        }
+    }
+
+    void actualSizeMapsSourcePixelsToDisplayPixels() {
+        QFETCH(qreal, imageDpr);
+        QFETCH(QString, imageMode);
+
+        MainWindow window;
+        auto *view = window.findChild<ImageViewer *>();
+        QVERIFY(view);
+        view->setFixedSize(640, 480);
+
+        QPixmap image(300, 180);
+        image.fill(Qt::red);
+        image.setDevicePixelRatio(imageDpr);
+        QPixmap other(400, 240);
+        other.fill(Qt::blue);
+        other.setDevicePixelRatio(3.0);
+
+        if (imageMode == "single") {
+            view->displayImages(std::make_shared<ImageHolder>(image, "single.png"));
+        } else if (imageMode == "first") {
+            view->displayImages(std::make_shared<ImageHolder>(image, "first.png", other, "second.png"));
+        } else {
+            view->displayImages(std::make_shared<ImageHolder>(other, "first.png", image, "second.png"));
+        }
+        QCoreApplication::processEvents();
+        if (imageMode == "second") {
+            view->showSecondImage();
+        } else if (imageMode == "comparison") {
+            view->showImageFromComparator(image, "comparison");
+        }
+
+        // Actual Size must replace a previous zoom and remain idempotent.
+        view->setTransform(QTransform::fromScale(1.7, 2.3));
+        for (int i = 0; i < 2; ++i) {
+            view->setToActualSize();
+            int visibleImages = 0;
+            for (auto *item : view->scene()->items()) {
+                auto *pixmapItem = qgraphicsitem_cast<QGraphicsPixmapItem *>(item);
+                if (!pixmapItem || !pixmapItem->isVisible()) {
+                    continue;
+                }
+                ++visibleImages;
+                const QRectF displayedRect = pixmapItem->deviceTransform(view->viewportTransform())
+                                                 .mapRect(pixmapItem->boundingRect());
+                const QSizeF physicalSize = displayedRect.size() * view->viewport()->devicePixelRatioF();
+                QVERIFY(qAbs(physicalSize.width() - image.width()) < 0.001);
+                QVERIFY(qAbs(physicalSize.height() - image.height()) < 0.001);
+            }
+            QCOMPARE(visibleImages, 1);
+        }
+    }
+
+    void actualSizeWithoutImagePreservesTransform() {
+        MainWindow window;
+        auto *view = window.findChild<ImageViewer *>();
+        QVERIFY(view);
+        const QTransform original = QTransform::fromScale(1.7, 1.7);
+        view->setTransform(original);
+        view->setToActualSize();
+        QCOMPARE(view->transform(), original);
+    }
+
     void switchingPreservesViewport_data() {
         QTest::addColumn<QSize>("viewportSize");
         QTest::addColumn<int>("frameWidth");
