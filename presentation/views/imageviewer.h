@@ -55,6 +55,7 @@ public:
     bool hasActiveSession();
 
 protected:
+    void resizeEvent(QResizeEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mousePressEvent(QMouseEvent *event) override ;
@@ -83,6 +84,7 @@ private:
     std::optional<int> mPressedKey;
     bool mIsSingleImageMode;
     QColor mInvalidColor;
+    bool mFitImageToView = false;
 
     // Zoom to selection
     bool mIsSelecting;                       // Whether the user is currently selecting an area

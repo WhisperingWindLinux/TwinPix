@@ -9,6 +9,81 @@ class TestImageViewerNavigation : public QObject {
     Q_OBJECT
 
 private slots:
+    void fourKImagesStayFittedWhenViewportChanges() {
+        MainWindow window;
+        auto *view = window.findChild<ImageViewer *>();
+        QVERIFY(view);
+        const qreal screenDpr = view->viewport()->devicePixelRatioF();
+        qInfo() << "Viewport DPR:" << screenDpr;
+        const QSize largeViewport = QSizeF(3200 / screenDpr, 1800 / screenDpr).toSize();
+        view->setFixedSize(largeViewport);
+
+        QPixmap first(3840, 2160);
+        QPixmap second(first.size());
+        first.fill(Qt::red);
+        second.fill(Qt::blue);
+        view->displayImages(std::make_shared<ImageHolder>(first, "first.png", second, "second.png"));
+        QCoreApplication::processEvents();
+
+        for (const QSize size : {largeViewport, largeViewport / 2, largeViewport}) {
+            view->setFixedSize(size);
+            QCoreApplication::processEvents();
+            const QTransform mapping = view->viewportTransform();
+            for (int i = 0; i < 4; ++i) {
+                const QRectF displayed = mapping.mapRect(QRectF(first.rect()));
+                const QRectF viewportRect(view->viewport()->rect());
+                QVERIFY2(viewportRect.contains(displayed), "Fit must keep all four image edges visible");
+                // At least one dimension should fill the viewport (allow Qt's fit margin).
+                QVERIFY(qMin(viewportRect.width() - displayed.width(),
+                             viewportRect.height() - displayed.height()) <= 6);
+                view->toggleImage();
+                QCOMPARE(view->viewportTransform(), mapping);
+            }
+        }
+    }
+
+    void resizingPreservesManualZoom_data() {
+        QTest::addColumn<QString>("mode");
+        for (const QString &mode : {QString("actual"), QString("in"), QString("out"), QString("selection")}) {
+            QTest::newRow(qPrintable(mode)) << mode;
+        }
+    }
+
+    void resizingPreservesManualZoom() {
+        QFETCH(QString, mode);
+        MainWindow window;
+        auto *view = window.findChild<ImageViewer *>();
+        QVERIFY(view);
+        view->setFixedSize(1000, 700);
+        QPixmap image(3840, 2160);
+        image.fill(Qt::red);
+        view->displayImages(std::make_shared<ImageHolder>(image, "first.png", image, "second.png"));
+        QCoreApplication::processEvents();
+        if (mode == "actual") {
+            view->setToActualSize();
+        } else if (mode == "in") {
+            view->zoomIn();
+        } else if (mode == "out") {
+            view->zoomOut();
+        } else {
+            const QTransform fitted = view->transform();
+            QTest::mousePress(view->viewport(), Qt::LeftButton, Qt::ShiftModifier, QPoint(200, 200));
+            QTest::mouseMove(view->viewport(), QPoint(400, 400));
+            QTest::mouseRelease(view->viewport(), Qt::LeftButton, Qt::ShiftModifier, QPoint(400, 400));
+            QVERIFY(view->transform().m11() > fitted.m11());
+        }
+        const QTransform manualZoom = view->transform();
+        view->setFixedSize(600, 400);
+        QCoreApplication::processEvents();
+        QCOMPARE(view->transform(), manualZoom);
+
+        view->setToFitImageInView();
+        view->setFixedSize(500, 300);
+        QCoreApplication::processEvents();
+        QVERIFY(QRectF(view->viewport()->rect()).contains(
+            view->viewportTransform().mapRect(QRectF(image.rect()))));
+    }
+
     void actualSizeMapsSourcePixelsToDisplayPixels_data() {
         QTest::addColumn<qreal>("imageDpr");
         QTest::addColumn<QString>("imageMode");

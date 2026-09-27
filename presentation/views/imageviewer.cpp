@@ -57,6 +57,15 @@ void ImageViewer::onColorUnderCursorTrackingStatusChanged(bool isActivate) {
 
 /* Zoom { */
 
+void ImageViewer::resizeEvent(QResizeEvent *event) {
+    QGraphicsView::resizeEvent(event);
+    // Use the updated logical viewport size, including after OS scaling or
+    // layout changes. Scrollbars are always off, so fitting cannot resize it.
+    if (mFitImageToView) {
+        setToFitImageInView();
+    }
+}
+
 void ImageViewer::wheelEvent(QWheelEvent *event) {
     if (!hasActiveSession()) {
         event->ignore();
@@ -71,12 +80,14 @@ void ImageViewer::wheelEvent(QWheelEvent *event) {
 }
 
 void ImageViewer::zoomIn() {
+    mFitImageToView = false;
     setCenterToViewRectCenter();
     scale(1.25, 1.25);
     sendPixelColorUnderCursor(mLastCursorPos);
 }
 
 void ImageViewer::zoomOut() {
+    mFitImageToView = false;
     setCenterToViewRectCenter();
     scale(0.8, 0.8);
     sendPixelColorUnderCursor(mLastCursorPos);
@@ -91,6 +102,7 @@ void ImageViewer::setToActualSize() {
     if (!hasActiveSession()) {
         return;
     }
+    mFitImageToView = false;
     // Pixmap items use logical coordinates; Actual Size maps each source
     // pixel to one physical viewport pixel, including DPR-tagged images.
     const qreal imageDpr = getImageShowedOnTheScreen().mImage.devicePixelRatio();
@@ -102,6 +114,7 @@ void ImageViewer::setToFitImageInView() {
     if (!hasActiveSession()) {
         return;
     }
+    mFitImageToView = true;
     fitInView(mFirstDisplayedImage, Qt::KeepAspectRatio);
     if (mSecondDisplayedImage != nullptr) {
         fitInView(mSecondDisplayedImage, Qt::KeepAspectRatio);
@@ -146,8 +159,11 @@ void ImageViewer::displayImages(const ImageHolderPtr images) {
         mCustomScene->addItem(mSecondDisplayedImage);
     }
 
+    mFitImageToView = true;
     QTimer::singleShot(0, this, [this]() {
-        setToFitImageInView();
+        if (mFitImageToView) {
+            setToFitImageInView();
+        }
     });
 }
 
@@ -222,6 +238,7 @@ bool ImageViewer::hasActiveSession() {
 }
 
 void ImageViewer::cleanUp() {
+    mFitImageToView = false;
     if (mFirstDisplayedImage != nullptr) {
         mCustomScene->removeItem(mFirstDisplayedImage);
         delete mFirstDisplayedImage;
@@ -602,6 +619,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event) {
             event->modifiers() & Qt::ShiftModifier
             )
         {
+            mFitImageToView = false;
             fitInView(sceneSelectionRect, Qt::KeepAspectRatio); // Adjust view to fit the selected area
         }
         else if (!sceneSelectionRect.isEmpty() &&
