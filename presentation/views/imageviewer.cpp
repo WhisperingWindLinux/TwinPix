@@ -13,6 +13,7 @@
 #include <QGraphicsView>
 #include <presentation/mainwindow.h>
 #include <business/utils/imagesinfo.h>
+#include <cmath>
 
 
 ImageViewer::ImageViewer(IDropListener *dropListener, MainWindow *parent)
@@ -62,11 +63,22 @@ void ImageViewer::wheelEvent(QWheelEvent *event) {
         event->ignore();
         return;
     }
-    if (event->angleDelta().y() > 0) {
-        zoomIn();
-    } else {
-        zoomOut();
+    // Prefer high-resolution trackpad movement, falling back to wheel rotation.
+    int delta = event->pixelDelta().y();
+    if (delta == 0) {
+        delta = event->angleDelta().y();
     }
+    if (delta == 0) {
+        event->ignore();
+        return;
+    }
+
+    // One wheel notch (120 angle units), or 120 pixels, is one zoom step.
+    // Fractional steps keep small trackpad movements proportional.
+    const double factor = std::pow(1.25, delta / 120.0);
+    setCenterToViewRectCenter();
+    scale(factor, factor);
+    sendPixelColorUnderCursor(mLastCursorPos);
     event->accept();
 }
 
